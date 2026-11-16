@@ -13,18 +13,16 @@ export default function HomePage(){
         <>
             <Header/>
             <div className="h-[calc(100vh-100px)] w-full">
-                <Routes path="/*">
+                <Routes>
                     <Route path="/" element={<Home/>}/>
                     <Route path="contact" element={<Contact/>}/>
                     <Route path="gallery" element={<Gallery/>}/>
                     <Route path="items" element={<Items/>}/>
                     <Route path="/booking/*" element={<BookingPage/>}/>
                     <Route path="/product/:key" element={<ProductOverview/>}/>
-                    {<Route path="/*" element={<ErrorNotFound/>}/>}
-                    
+                    <Route path="*" element={<ErrorNotFound/>}/>
                 </Routes>
             </div>
         </>
-        
     )
 }
