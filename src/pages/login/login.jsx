@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
 import api, { apiError } from "../../utils/api";
+import { setUser } from "../../utils/auth";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -12,12 +13,17 @@ export default function LoginPage() {
   const navigate = useNavigate();
 
   function finishLogin(data) {
-    localStorage.setItem("token", data.token);
-    toast.success("Successfully logged in");
+    setUser(data.user);
+    if (data.csrfToken) sessionStorage.setItem("csrfToken", data.csrfToken);
     const user = data.user;
-    if (user.emailVerified === false) navigate("/verify-email");
-    else if (user.role === "admin") navigate("/admin");
-    else navigate("/");
+    if (user.emailVerified === false) {
+      toast.success("Login successful. Please verify your email.");
+      navigate("/verify-email");
+    } else {
+      toast.success("Successfully logged in");
+      if (user.role === "admin") navigate("/admin");
+      else navigate("/");
+    }
   }
 
   const googleLogin = useGoogleLogin({

@@ -6,6 +6,7 @@ import MobileNavPanel from "./mobileNavPanel";
 import { cartCount } from "../utils/cart";
 import { getUser, logout } from "../utils/auth";
 import { navLinks, siteConfig } from "../config/site";
+import api from "../utils/api";
 
 export default function Header() {
   const [navPanelOpen, setNavPanelOpen] = useState(false);
@@ -55,7 +56,9 @@ export default function Header() {
             {user ? (
               <>
                 <img src={user.profilePicture} alt="" className="w-8 h-8 rounded-full object-cover border border-slate-500" referrerPolicy="no-referrer" />
-                <button className="text-sm text-slate-300 transition hover:text-white" onClick={logout}>Logout</button>
+                <button className="text-sm text-slate-300 transition hover:text-white" onClick={async () => {
+                  try { await api.post("/api/users/logout"); } finally { logout(); }
+                }}>Logout</button>
               </>
             ) : (
               <>

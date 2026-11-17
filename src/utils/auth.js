@@ -1,31 +1,22 @@
-export function getToken() {
-  return localStorage.getItem("token");
+export function setUser(user) {
+  if (user) sessionStorage.setItem("user", JSON.stringify(user));
+  else sessionStorage.removeItem("user");
 }
 
-/** Returns the user stored in the JWT, or null when logged out / expired. */
+/** Returns the non-sensitive user profile cached for the current browser session. */
 export function getUser() {
-  const token = getToken();
-  if (!token) return null;
+  const user = sessionStorage.getItem("user");
+  if (!user) return null;
   try {
-    const b64 = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
-    const json = decodeURIComponent(
-      atob(b64)
-        .split("")
-        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-        .join("")
-    );
-    const payload = JSON.parse(json);
-    if (payload.exp && payload.exp * 1000 < Date.now()) {
-      localStorage.removeItem("token");
-      return null;
-    }
-    return payload;
+    return JSON.parse(user);
   } catch {
+    sessionStorage.removeItem("user");
     return null;
   }
 }
 
 export function logout() {
-  localStorage.removeItem("token");
+  sessionStorage.removeItem("user");
+  sessionStorage.removeItem("csrfToken");
   window.location.href = "/login";
 }

@@ -1,9 +1,9 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { FaCirclePlus, FaEye } from "react-icons/fa6";
 
 import { Link, useNavigate } from "react-router-dom";
+import api from "../../utils/api";
 
 export default function AdminItemsPage() {
   const [items, setItems] = useState([]);
@@ -12,11 +12,8 @@ export default function AdminItemsPage() {
 
   useEffect(() => {
     if (!itemsLoaded) {
-      const token = localStorage.getItem("token");
-      axios
-        .get(`${import.meta.env.VITE_BACKEND_URL}/api/products`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
+      api
+        .get("/api/products")
         .then((res) => {
           console.log(res.data);
           setItems(res.data);
@@ -28,19 +25,12 @@ export default function AdminItemsPage() {
     }
   }, [itemsLoaded]);
 
-  const handleEdit = (productId) => {
-    navigate(`/admin/items/edit/${productId}`);
-  };
-
   const handleDelete = (key) => {
     if (window.confirm("Are you sure you want to delete this item?")) {
       setItems(items.filter((item) => item.key !== key));
     }
-    const token = localStorage.getItem("token");
-    axios
-      .delete(`${import.meta.env.VITE_BACKEND_URL}/api/products/${key}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+    api
+      .delete(`/api/products/${key}`)
       .then((res) => {
         console.log(res.data);
         setItemsLoaded(false);

@@ -5,7 +5,7 @@ import { TbGraphFilled } from "react-icons/tb";
 import { Link, NavLink, Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../../utils/api";
-import { getToken } from "../../utils/auth";
+import { getUser } from "../../utils/auth";
 import Spinner from "../../components/spinner";
 import AdminDashboard from "./adminDashboard";
 import AdminItemsPage from "./adminItemsPage";
@@ -29,7 +29,7 @@ export default function AdminPage() {
   const [userValidated, setUserValidated] = useState(false);
 
   useEffect(() => {
-    if (!getToken()) {
+    if (!getUser()) {
       window.location.href = "/login";
       return;
     }
@@ -40,7 +40,7 @@ export default function AdminPage() {
         else window.location.href = "/";
       })
       .catch(() => {
-        localStorage.removeItem("token");
+        sessionStorage.removeItem("user");
         window.location.href = "/login";
       });
   }, []);

@@ -1,11 +1,16 @@
 import axios from "axios";
-import { getToken } from "./auth";
 
-const api = axios.create({ baseURL: import.meta.env.VITE_BACKEND_URL });
+const configuredUrl = new URL(import.meta.env.VITE_BACKEND_URL);
+const localHosts = new Set(["localhost", "127.0.0.1"]);
+const baseURL = import.meta.env.DEV && localHosts.has(configuredUrl.hostname)
+  ? `${configuredUrl.protocol}//${window.location.hostname}:${configuredUrl.port}`
+  : configuredUrl.toString();
+
+const api = axios.create({ baseURL, withCredentials: true });
 
 api.interceptors.request.use((config) => {
-  const token = getToken();
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+  const storedCsrf = sessionStorage.getItem("csrfToken");
+  if (storedCsrf) config.headers["X-CSRF-Token"] = storedCsrf;
   return config;
 });
 

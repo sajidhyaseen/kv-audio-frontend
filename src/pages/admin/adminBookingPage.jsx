@@ -1,7 +1,7 @@
-import axios from "axios";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { IoMdCloseCircleOutline } from "react-icons/io";
+import api from "../../utils/api";
 
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState([]);
@@ -11,15 +11,7 @@ export default function AdminOrdersPage() {
 
   const fetchOrders = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const res = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/orders/`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await api.get("/api/orders/");
       setOrders(res.data);
     } catch (err) {
       console.error(err);
@@ -35,19 +27,8 @@ export default function AdminOrdersPage() {
   }, [loading]);
 
   function handleOrderStatusChange(orderId, status){
-    const token = localStorage.getItem("token");
     console.log(orderId, status);
-    axios.put(
-      `${import.meta.env.VITE_BACKEND_URL}/api/orders/status/${orderId}`,
-      {
-        status: status,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    ).then(()=>{
+    api.put(`/api/orders/status/${orderId}`, { status }).then(()=>{
       console.log("Order status updated");
       setModelOpened(false);
       setLoading(true);

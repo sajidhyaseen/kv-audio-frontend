@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import api, { apiError } from "../../utils/api";
-import { getToken } from "../../utils/auth";
+import { getUser, setUser } from "../../utils/auth";
 
 export default function VerifyEmail() {
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ export default function VerifyEmail() {
   }
 
   useEffect(() => {
-    if (!getToken()) {
+    if (!getUser()) {
       navigate("/login");
       return;
     }
@@ -43,7 +43,8 @@ export default function VerifyEmail() {
     setBusy(true);
     try {
       const res = await api.post("/api/users/verifyEmail", { code: parseInt(otp, 10) });
-      if (res.data.token) localStorage.setItem("token", res.data.token);
+      setUser(res.data.user);
+      if (res.data.csrfToken) sessionStorage.setItem("csrfToken", res.data.csrfToken);
       toast.success("Email verified");
       navigate("/");
     } catch (err) {
