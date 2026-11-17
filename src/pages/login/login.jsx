@@ -85,6 +85,9 @@ export default function LoginPage() {
           </button>
 
           <p className="text-sm text-slate-200">
+            <Link to="/forgot-password" className="text-accent font-semibold hover:underline">Forgot password?</Link>
+          </p>
+          <p className="text-sm text-slate-200">
             New here? <Link to="/register" className="text-accent font-semibold hover:underline">Create an account</Link>
             {" · "}
             <Link to="/" className="hover:underline">Home</Link>

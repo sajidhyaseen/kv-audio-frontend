@@ -7,6 +7,8 @@ import HomePage from './pages/home/homePage';
 import LoginPage from './pages/login/login';
 import RegisterPage from './pages/register/register';
 import VerifyEmail from './pages/verifyEmail/verifyEmail';
+import ForgotPassword from './pages/forgotPassword/forgotPassword';
+import ResetPassword from './pages/resetPassword/resetPassword';
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -23,6 +25,8 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/admin/*" element={<AdminPage />} />
           <Route path="/*" element={<HomePage />} />
         </Routes>
