@@ -1,59 +1,76 @@
-export function loadCart(){
-    let cart = localStorage.getItem("cart");
-    if(cart == null){
-        cart = {
-            orderedItems : [],
-            days : 1,
-            startingDate : formatDate(new Date()),
-            endingDate : formatDate(new Date())
-        }
+const KEY = "cart";
 
-        const cartString = JSON.stringify(cart);
-        localStorage.setItem("cart", cartString);
-        return cart;
-    }
-    cart = JSON.parse(cart);
-    return cart;
+export function formatDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
-export function addToCart(key, qty){
-    const cart = loadCart();
-    let found = false;
-
-    for(let i = 0; i <cart.orderedItems.length; i++){
-        if(cart.orderedItems[i].key == key){
-            cart.orderedItems[i].qty += qty;
-            found = true;
-        }
-    }
-
-    if(!found){
-        cart.orderedItems.push({key, qty});
-    }
-
-    const cartString = JSON.stringify(cart);
-    localStorage.setItem("cart", cartString);
-}
-
-export function removeFromCart(key){
-    const cart = loadCart();
-    const newCart = cart.orderedItems.filter((item)=>item.key != key);
-    cart.orderedItems = newCart;
-    const cartString = JSON.stringify(cart);
-    localStorage.setItem("cart", cartString);
-}
-
-export function formatDate(date){
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-}
-
-export function updateCartQty(itemKey, qty) {
-  const cart = JSON.parse(localStorage.getItem("cart") || "{}");
-  if (cart[itemKey]) {
-    cart[itemKey] = qty;
-    localStorage.setItem("cart", JSON.stringify(cart));
+export function loadCart() {
+  try {
+    const cart = JSON.parse(localStorage.getItem(KEY));
+    if (cart && Array.isArray(cart.orderedItems)) return cart;
+  } catch {
+    // ignore corrupted data
   }
+  return {
+    orderedItems: [],
+    days: 1,
+    startingDate: formatDate(new Date()),
+    endingDate: formatDate(new Date(Date.now() + 24 * 60 * 60 * 1000)),
+  };
+}
+
+function saveCart(cart) {
+  try {
+    localStorage.setItem(KEY, JSON.stringify(cart));
+  } catch {
+    // storage unavailable
+  }
+  window.dispatchEvent(new Event("cart:updated"));
+}
+
+/** Adds `qty` (can be negative) to an item; removes it when it reaches 0. */
+export function addToCart(key, qty = 1) {
+  const cart = loadCart();
+  const row = cart.orderedItems.find((i) => i.key === key);
+  if (row) {
+    row.qty += qty;
+    if (row.qty <= 0) cart.orderedItems = cart.orderedItems.filter((i) => i.key !== key);
+  } else if (qty > 0) {
+    cart.orderedItems.push({ key, qty });
+  }
+  saveCart(cart);
+}
+
+export function setCartQty(key, qty) {
+  const cart = loadCart();
+  cart.orderedItems = cart.orderedItems
+    .map((i) => (i.key === key ? { ...i, qty } : i))
+    .filter((i) => i.qty > 0);
+  saveCart(cart);
+}
+export const updateCartQty = setCartQty;
+
+export function removeFromCart(key) {
+  const cart = loadCart();
+  cart.orderedItems = cart.orderedItems.filter((i) => i.key !== key);
+  saveCart(cart);
+}
+
+export function setCartDates(startingDate, endingDate) {
+  const cart = loadCart();
+  cart.startingDate = startingDate;
+  cart.endingDate = endingDate;
+  saveCart(cart);
+}
+
+export function clearCart() {
+  localStorage.removeItem(KEY);
+  window.dispatchEvent(new Event("cart:updated"));
+}
+
+export function cartCount() {
+  return loadCart().orderedItems.reduce((n, i) => n + i.qty, 0);
 }

@@ -15,7 +15,6 @@ export default function RegisterPage() {
 
   function handleOnSubmit(e) {
     e.preventDefault();
-    console.log({ firstName, lastName, email, password, address, phone });
     axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/users/`,{
         email: email,
         firstName : firstName,

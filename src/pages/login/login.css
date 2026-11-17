@@ -1,8 +1,16 @@
 .bg-picture{
-    background-image: url('/bg1.jpg');
+    background-image: linear-gradient(120deg, rgba(15, 23, 42, .82), rgba(15, 23, 42, .42)), url('/bg1.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     height: 100vh;
     position: relative;
+}
+
+.bg-picture::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 75% 20%, rgba(225, 106, 84, .25), transparent 34%);
+    pointer-events: none;
 }

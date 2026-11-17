@@ -1,6 +1,7 @@
-import axios from "axios";
+import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { IoMdCloseCircleOutline } from "react-icons/io";
+import api from "../../utils/api";
 
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState([]);
@@ -10,15 +11,7 @@ export default function AdminOrdersPage() {
 
   const fetchOrders = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const res = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/orders/`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await api.get("/api/orders/");
       setOrders(res.data);
     } catch (err) {
       console.error(err);
@@ -34,24 +27,14 @@ export default function AdminOrdersPage() {
   }, [loading]);
 
   function handleOrderStatusChange(orderId, status){
-    const token = localStorage.getItem("token");
     console.log(orderId, status);
-    axios.put(
-      `${import.meta.env.VITE_BACKEND_URL}/api/orders/status/${orderId}`,
-      {
-        status: status,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    ).then(()=>{
+    api.put(`/api/orders/status/${orderId}`, { status }).then(()=>{
       console.log("Order status updated");
       setModelOpened(false);
       setLoading(true);
     }).catch((err)=>{
       console.error(err);
+      toast.error(err?.response?.data?.message || "Could not update the order");
       setLoading(true);
     })
   }
@@ -71,7 +54,7 @@ export default function AdminOrdersPage() {
               <th className="border border-gray-300 px-4 py-2">Days</th>
               <th className="border border-gray-300 px-4 py-2">Start Date</th>
               <th className="border border-gray-300 px-4 py-2">End Date</th>
-              <th className="border border-gray-300 px-4 py-2">Approved</th>
+              <th className="border border-gray-300 px-4 py-2">Status</th>
               <th className="border border-gray-300 px-4 py-2">Total (Rs.)</th>
               <th className="border border-gray-300 px-4 py-2">Order Date</th>
             </tr>
@@ -128,6 +111,9 @@ export default function AdminOrdersPage() {
                       <button onClick={()=>{
                         handleOrderStatusChange(activeOrder.orderId, "Rejected")
                       }} className="flex bg-red-600 text-white px-4 py-1 rounded-md ml-4">Reject</button>
+                      <button onClick={()=>{
+                        handleOrderStatusChange(activeOrder.orderId, "Cancelled")
+                      }} className="flex bg-gray-600 text-white px-4 py-1 rounded-md ml-4">Cancel</button>
 
                     </div>
                     <table className="w-full mt-4">

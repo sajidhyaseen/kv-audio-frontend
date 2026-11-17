@@ -9,10 +9,10 @@ export default {
       colors:{
         primary : "#C0C9EE",
         secondary : "#DBDBDB",
-        accent : "#E16A54"
+        accent : "#E16A54",
+        ink : "#0f172a"
       }
     },
   },
   plugins: [],
 }
-

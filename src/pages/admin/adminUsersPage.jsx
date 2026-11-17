@@ -1,5 +1,5 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
+import api from "../../utils/api";
 
 export default function AdminUsersPage() {
   const [users, setUsers] = useState([]);
@@ -8,13 +8,7 @@ export default function AdminUsersPage() {
   // ✅ central fetch function
   const fetchUsers = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const res = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/api/users/all`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const res = await api.get("/api/users/all");
       setUsers(res.data);
     } catch (err) {
       console.error(err);
@@ -32,14 +26,7 @@ export default function AdminUsersPage() {
   // ✅ block/unblock user
   const handleBlockUser = async (email) => {
     try {
-      const token = localStorage.getItem("token");
-      await axios.put(
-        `${import.meta.env.VITE_BACKEND_URL}/api/users/block/${email}`,
-        {},
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      await api.put(`/api/users/block/${email}`);
       // refresh users
       setLoading(true);
     } catch (err) {

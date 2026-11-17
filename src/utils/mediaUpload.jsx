@@ -1,30 +1,34 @@
-import { createClient } from "@supabase/supabase-js"
+import { createClient } from "@supabase/supabase-js";
 
-const anon_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlybWVwc2dveWR0c2thdGVydGt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk1MzA2MTQsImV4cCI6MjA4NTEwNjYxNH0.hzu_--ajIlZFCWwSfbV-soDRP3wKb-97j61z1Mkyl1U"
-const supabase_url = "https://irmepsgoydtskatertku.supabase.co"
-const supabase = createClient(supabase_url, anon_key)
+// Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in Vercel / .env for your project.
+// (The anon key is public by design; storage rules are enforced by the policies in Supabase.)
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-export default function mediaUpload(file) {
+if (!supabaseUrl || !anonKey) {
+  throw new Error("VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are required.");
+}
+const BUCKET = "images";
+const MAX_SIZE = 5 * 1024 * 1024; // 5 MB
 
-    return new Promise((resolve, reject) => {
-        if(file == null){
-            reject("No file selected")
-        }
+const supabase = createClient(supabaseUrl, anonKey);
 
-        const timestamp = new Date().getTime();
-        const fileName = timestamp + file.name
+/** Uploads one image to Supabase Storage and resolves with its public URL. Rejects with an Error. */
+export default async function mediaUpload(file) {
+  if (!file) throw new Error("No file selected");
+  if (!file.type.startsWith("image/")) throw new Error(`${file.name} is not an image`);
+  if (file.size > MAX_SIZE) throw new Error(`${file.name} is larger than 5 MB`);
 
-        supabase.storage.from("images").upload(fileName, file, {
-            cacheControl: '3600',
-            upset: false,
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+  const fileName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${safeName}`;
 
-        }).then(() => {
-            const publicUrl = supabase.storage.from("images").getPublicUrl(fileName).data.publicUrl;
-            resolve(publicUrl)
-        }).catch(()=>{
-            reject("Error uploading file")
-        })
-    });
-
-
+  const { error } = await supabase.storage.from(BUCKET).upload(fileName, file, {
+    cacheControl: "3600",
+    upsert: false,
+  });
+  if (error) {
+    console.error("Supabase upload error:", error);
+    throw new Error(error.message || "Error uploading file");
+  }
+  return supabase.storage.from(BUCKET).getPublicUrl(fileName).data.publicUrl;
 }
