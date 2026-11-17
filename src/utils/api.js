@@ -1,6 +1,9 @@
 import axios from "axios";
 
 const configuredUrl = new URL(import.meta.env.VITE_BACKEND_URL);
+if (import.meta.env.PROD && configuredUrl.protocol !== "https:") {
+  throw new Error("VITE_BACKEND_URL must use HTTPS in production.");
+}
 const localHosts = new Set(["localhost", "127.0.0.1"]);
 const baseURL = import.meta.env.DEV && localHosts.has(configuredUrl.hostname)
   ? `${configuredUrl.protocol}//${window.location.hostname}:${configuredUrl.port}`

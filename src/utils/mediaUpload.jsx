@@ -2,8 +2,12 @@ import { createClient } from "@supabase/supabase-js";
 
 // Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in Vercel / .env for your project.
 // (The anon key is public by design; storage rules are enforced by the policies in Supabase.)
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "https://irmepsgoydtskatertku.supabase.co";
-const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlybWVwc2dveWR0c2thdGVydGt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk1MzA2MTQsImV4cCI6MjA4NTEwNjYxNH0.hzu_--ajIlZFCWwSfbV-soDRP3wKb-97j61z1Mkyl1U";
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !anonKey) {
+  throw new Error("VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are required.");
+}
 const BUCKET = "images";
 const MAX_SIZE = 5 * 1024 * 1024; // 5 MB
 

@@ -8,9 +8,11 @@ import LoginPage from './pages/login/login';
 import RegisterPage from './pages/register/register';
 import VerifyEmail from './pages/verifyEmail/verifyEmail';
 
-// Set VITE_GOOGLE_CLIENT_ID in Vercel / .env. The fallback is the client ID you were already using (it is public).
-const GOOGLE_CLIENT_ID =
-  import.meta.env.VITE_GOOGLE_CLIENT_ID || '653992077795-ic89v41lkt66c3pbhsctietk1jnlk9vu.apps.googleusercontent.com';
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+if (!GOOGLE_CLIENT_ID) {
+  throw new Error('VITE_GOOGLE_CLIENT_ID is required.');
+}
 
 function App() {
   return (
