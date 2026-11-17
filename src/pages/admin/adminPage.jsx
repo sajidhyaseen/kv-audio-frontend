@@ -46,11 +46,11 @@ export default function AdminPage() {
   }, []);
 
   return (
-    <div className="w-full h-screen flex bg-slate-50">
-      <aside className="w-16 md:w-56 h-full bg-ink text-slate-200 flex flex-col shrink-0">
+    <div className="w-full h-screen flex bg-[#f7f8fb]">
+      <aside className="w-16 md:w-60 h-full bg-ink text-slate-200 flex flex-col shrink-0 shadow-xl shadow-slate-950/10">
         <Link to="/" className="h-[70px] flex items-center justify-center md:justify-start md:px-4 gap-3 border-b border-slate-700">
           <img src="/logo.png" alt="" className="w-9 h-9 rounded-full object-cover border-2 border-accent" />
-          <span className="hidden md:block font-bold text-white">KV Admin</span>
+          <span className="hidden md:block font-bold tracking-tight text-white">KV Admin<span className="text-accent">.</span></span>
         </Link>
         <nav className="flex-1 py-2">
           {LINKS.map(({ to, label, icon: Icon, end }) => (
@@ -60,7 +60,7 @@ export default function AdminPage() {
               end={end}
               title={label}
               className={({ isActive }) =>
-                `flex items-center justify-center md:justify-start gap-3 px-4 py-3 text-lg ${isActive ? "bg-accent text-white" : "hover:bg-slate-700"}`
+                `mx-2 flex items-center justify-center rounded-xl md:justify-start gap-3 px-4 py-3 text-lg transition ${isActive ? "bg-accent text-white shadow-lg shadow-accent/20" : "text-slate-400 hover:bg-white/10 hover:text-white"}`
               }
             >
               <Icon />

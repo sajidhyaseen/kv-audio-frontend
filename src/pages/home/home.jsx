@@ -53,14 +53,15 @@ export default function Home() {
   return (
     <div className="w-full">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-ink via-slate-800 to-accent/70 text-white">
-        <div className="absolute -right-24 -top-24 w-96 h-96 rounded-full bg-accent/20 blur-3xl" />
-        <div className="relative mx-auto max-w-7xl px-4 py-20 md:py-32 text-center md:text-left">
-          <p className="inline-block rounded-full bg-white/10 px-4 py-1 text-sm tracking-wide">{siteConfig.tagline}</p>
-          <h1 className="mt-5 max-w-3xl text-4xl md:text-6xl font-extrabold leading-tight">
+      <section className="relative overflow-hidden bg-ink text-white">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_15%,rgba(225,106,84,0.28),transparent_34%),linear-gradient(120deg,#0f172a_0%,#172033_55%,#26364f_100%)]" />
+        <div className="absolute -bottom-40 -right-20 h-96 w-96 rounded-full border-[36px] border-white/[0.03]" />
+        <div className="relative mx-auto max-w-7xl px-4 py-24 md:py-36 text-center md:text-left">
+          <p className="inline-flex rounded-full border border-white/15 bg-white/[0.06] px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-slate-200">{siteConfig.tagline}</p>
+          <h1 className="mt-6 max-w-3xl text-4xl font-extrabold leading-[1.08] tracking-tight md:text-6xl">
             Sound and lighting that make your event unforgettable.
           </h1>
-          <p className="mt-5 max-w-2xl text-lg text-slate-200">
+          <p className="mt-6 max-w-2xl text-base leading-7 text-slate-300 md:text-lg">
             Rent professional audio gear for weddings, parties, concerts and conferences. Check availability and book online.
           </p>
           <div className="mt-8 flex flex-wrap gap-3 justify-center md:justify-start">
@@ -71,10 +72,10 @@ export default function Home() {
       </section>
 
       {/* Features */}
-      <section className="mx-auto max-w-7xl px-4 -mt-10 relative z-10">
+      <section className="relative z-10 mx-auto -mt-12 max-w-7xl px-4">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {FEATURES.map(({ icon: Icon, title, text }) => (
-            <div key={title} className="bg-white rounded-2xl shadow-md border border-slate-100 p-5">
+            <div key={title} className="rounded-2xl border border-slate-200/70 bg-white p-5 shadow-lg shadow-slate-900/5">
               <div className="w-11 h-11 rounded-xl bg-accent/10 text-accent flex items-center justify-center text-xl"><Icon /></div>
               <h3 className="mt-3 font-semibold text-slate-800">{title}</h3>
               <p className="mt-1 text-sm text-slate-600">{text}</p>
@@ -87,7 +88,7 @@ export default function Home() {
       <section className="mx-auto max-w-7xl px-4 mt-16">
         <div className="flex items-end justify-between mb-6">
           <div>
-            <h2 className="text-3xl font-bold text-slate-800">Popular equipment</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-slate-800">Popular equipment</h2>
             <p className="text-slate-500">A taste of what you can rent.</p>
           </div>
           <Link to="/items" className="text-accent font-semibold hover:underline">View all →</Link>
@@ -106,7 +107,7 @@ export default function Home() {
       {/* How it works */}
       <section className="mt-16 bg-white border-y border-slate-100">
         <div className="mx-auto max-w-7xl px-4 py-14">
-          <h2 className="text-3xl font-bold text-slate-800 text-center">How it works</h2>
+          <h2 className="text-3xl font-bold tracking-tight text-slate-800 text-center">How it works</h2>
           <div className="mt-8 grid gap-6 md:grid-cols-3">
             {STEPS.map((s) => (
               <div key={s.n} className="text-center px-4">
@@ -121,7 +122,7 @@ export default function Home() {
 
       {/* Reviews */}
       <section className="mx-auto max-w-7xl px-4 mt-16">
-        <h2 className="text-3xl font-bold text-slate-800 text-center">What customers say</h2>
+        <h2 className="text-3xl font-bold tracking-tight text-slate-800 text-center">What customers say</h2>
         {reviews.length === 0 ? (
           <p className="mt-4 text-center text-slate-500">No reviews yet. Be the first to share your experience!</p>
         ) : (
@@ -165,7 +166,7 @@ export default function Home() {
       {/* CTA */}
       <section className="mx-auto max-w-7xl px-4 mt-16">
         <div className="rounded-3xl bg-gradient-to-r from-accent to-orange-500 p-8 md:p-12 text-white text-center">
-          <h2 className="text-3xl font-bold">Planning an event?</h2>
+          <h2 className="text-3xl font-bold tracking-tight">Planning an event?</h2>
           <p className="mt-2 text-white/90">Tell us what you need and we will help you pick the right setup.</p>
           <Link to="/contact" className="btn bg-white !text-accent mt-6 !px-6 !py-3 hover:bg-slate-100">Contact us</Link>
         </div>

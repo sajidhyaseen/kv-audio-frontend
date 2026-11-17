@@ -46,13 +46,16 @@ export default function LoginPage() {
   return (
     <div className="bg-picture w-full h-screen flex justify-center items-center px-4">
       <form onSubmit={handleOnSubmit} autoComplete="off" className="w-full max-w-[400px]">
-        <div className="w-full backdrop-blur-xl bg-black/30 rounded-2xl flex justify-center items-center flex-col p-8 gap-6">
-          <img src="/logo.png" alt="logo" className="w-[90px] h-[90px] object-cover rounded-full" />
+        <div className="w-full rounded-3xl border border-white/15 bg-slate-950/55 p-8 shadow-2xl shadow-slate-950/30 backdrop-blur-xl flex justify-center items-center flex-col gap-6">
+          <div className="text-center">
+            <img src="/logo.png" alt="logo" className="mx-auto h-[82px] w-[82px] rounded-full border-2 border-accent object-cover" />
+            <p className="mt-4 text-sm font-medium uppercase tracking-[0.2em] text-slate-300">Welcome back</p>
+          </div>
 
           <input
             type="email"
             placeholder="Email"
-            className="w-full h-[34px] bg-transparent border-b-2 border-white text-white text-lg outline-none placeholder:text-slate-300"
+            className="h-12 w-full rounded-xl border border-white/20 bg-white/10 px-4 text-white outline-none transition placeholder:text-slate-300 focus:border-accent focus:ring-4 focus:ring-accent/20"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             autoComplete="off"
@@ -61,17 +64,17 @@ export default function LoginPage() {
           <input
             type="password"
             placeholder="Password"
-            className="w-full h-[34px] bg-transparent border-b-2 border-white text-white text-lg outline-none placeholder:text-slate-300"
+            className="h-12 w-full rounded-xl border border-white/20 bg-white/10 px-4 text-white outline-none transition placeholder:text-slate-300 focus:border-accent focus:ring-4 focus:ring-accent/20"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             autoComplete="new-password"
             required
           />
 
-          <button className="w-full h-[46px] bg-accent text-white text-xl font-bold rounded-lg disabled:opacity-60" disabled={loading}>
+          <button className="btn btn-accent w-full !h-12 text-base" disabled={loading}>
             {loading ? "Logging in..." : "Login"}
           </button>
-          <button type="button" onClick={() => googleLogin()} className="w-full h-[46px] bg-white text-slate-800 text-lg font-semibold rounded-lg">
+          <button type="button" onClick={() => googleLogin()} className="w-full !h-12 rounded-xl bg-white text-base font-semibold text-slate-800 transition hover:bg-slate-100">
             Continue with Google
           </button>
 

@@ -5,7 +5,7 @@ import { money } from "../utils/format";
 
 export default function ProductCard({ item }) {
   return (
-    <div className="w-full rounded-2xl overflow-hidden shadow-md border border-slate-200 bg-white hover:shadow-xl transition-shadow duration-300 flex flex-col group">
+    <div className="w-full overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-900/10 flex flex-col group">
       <Link to={`/product/${item.key}`} className="block w-full aspect-[4/3] relative overflow-hidden bg-slate-100">
         <img
           className="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-105"
@@ -13,13 +13,13 @@ export default function ProductCard({ item }) {
           alt={item.name}
           loading="lazy"
         />
-        <span className="absolute top-3 left-3 rounded-full bg-ink/80 px-3 py-1 text-xs font-medium text-white capitalize">
+        <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-slate-700 capitalize shadow-sm backdrop-blur">
           {item.category}
         </span>
       </Link>
 
       <div className="p-4 flex flex-col flex-grow gap-2">
-        <h2 className="text-lg font-semibold text-slate-800">{item.name}</h2>
+        <h2 className="text-lg font-bold tracking-tight text-slate-800">{item.name}</h2>
         <p className="text-sm text-slate-600 line-clamp-2">{item.description}</p>
         <div className="mt-auto pt-2 flex items-end justify-between">
           <div>
