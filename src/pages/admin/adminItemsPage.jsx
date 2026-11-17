@@ -67,6 +67,7 @@ export default function AdminItemsPage() {
                 <th className="py-3 border px-4">Key</th>
                 <th className="py-3 border px-4">Name</th>
                 <th className="py-3 border px-4">Price</th>
+                <th className="py-3 border px-4">Stock</th>
                 <th className="py-3 border px-4">Category</th>
                 <th className="py-3 border px-4">Dimensions</th>
                 <th className="py-3 border px-4">Availability</th>
@@ -78,7 +79,8 @@ export default function AdminItemsPage() {
                 <tr key={product.key} className="border-b">
                   <td className="px-4 py-3 text-gray-700">{product.key}</td>
                   <td className="px-4 py-3 text-gray-700">{product.name}</td>
-                  <td className="px-4 py-3 text-gray-700">${product.price}</td>
+                  <td className="px-4 py-3 text-gray-700">Rs. {product.price}</td>
+                  <td className="px-4 py-3 text-gray-700">{product.stock ?? 1}</td>
                   <td className="px-4 py-3 text-gray-700">{product.category}</td>
                   <td className="px-4 py-3 text-gray-700">{product.dimensions}</td>
                   <td className="px-4 py-3 text-gray-700">

@@ -1,58 +1,49 @@
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
+import { addToCart } from "../utils/cart";
+import { money } from "../utils/format";
 
 export default function ProductCard({ item }) {
   return (
-    <div className="w-full rounded-2xl overflow-hidden shadow-md border border-secondary bg-white hover:shadow-lg transition-shadow duration-300 flex flex-col group z-0">
-      {/* Image */}
-      <div className="w-full aspect-[4/3] relative overflow-hidden bg-gray-100">
+    <div className="w-full rounded-2xl overflow-hidden shadow-md border border-slate-200 bg-white hover:shadow-xl transition-shadow duration-300 flex flex-col group">
+      <Link to={`/product/${item.key}`} className="block w-full aspect-[4/3] relative overflow-hidden bg-slate-100">
         <img
           className="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-105"
-          src={item.image?.[0] || "/placeholder.png"}
+          src={item.image?.[0] || "/logo.png"}
           alt={item.name}
+          loading="lazy"
         />
-        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition duration-500" />
-      </div>
-
-      {/* Content */}
-      <div className="p-3 sm:p-4 flex flex-col flex-grow gap-2">
-        <h2 className="text-base sm:text-lg md:text-xl font-semibold text-gray-800">
-          {item.name}
-        </h2>
-        <p className="text-xs sm:text-sm text-gray-600 line-clamp-3">
-          {item.description}
-        </p>
-
-        {/* Category and Price */}
-        <div className="flex justify-between items-center text-xs sm:text-sm mt-2">
-          <span className="text-gray-500 italic">{item.category}</span>
-          <span className="text-accent font-bold">Rs. {item.price}</span>
-        </div>
-
-        {/* Availability */}
-        <span
-          className={`mt-1 w-fit px-2 sm:px-3 py-1 rounded-full text-[10px] sm:text-xs font-medium ${
-            item.availability
-              ? "bg-green-100 text-green-700"
-              : "bg-red-100 text-red-700"
-          }`}
-        >
-          {item.availability ? "In Stock" : "Out of Stock"}
+        <span className="absolute top-3 left-3 rounded-full bg-ink/80 px-3 py-1 text-xs font-medium text-white capitalize">
+          {item.category}
         </span>
+      </Link>
 
-        {/* Dimensions */}
-        <div className="text-[10px] sm:text-xs text-gray-500 mt-1">
-          Dimensions: {item.dimensions}
+      <div className="p-4 flex flex-col flex-grow gap-2">
+        <h2 className="text-lg font-semibold text-slate-800">{item.name}</h2>
+        <p className="text-sm text-slate-600 line-clamp-2">{item.description}</p>
+        <div className="mt-auto pt-2 flex items-end justify-between">
+          <div>
+            <span className="text-xl font-bold text-accent">{money(item.price)}</span>
+            <span className="text-xs text-slate-500"> / day</span>
+          </div>
+          <span className={`rounded-full px-2 py-1 text-xs font-medium ${item.availability ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+            {item.availability ? "In Stock" : "Out of Stock"}
+          </span>
         </div>
       </div>
 
-      {/* Action Button */}
-      <div className="px-3 sm:px-4 pb-3 sm:pb-4 mt-auto">
-        <Link
-          to={`/product/${item.key}`}
-          className="block w-full text-center bg-accent text-white font-semibold py-2 rounded-lg hover:bg-opacity-90 transition text-sm sm:text-base"
+      <div className="px-4 pb-4 flex gap-2">
+        <Link to={`/product/${item.key}`} className="btn btn-outline flex-1 text-sm">Details</Link>
+        <button
+          className="btn btn-accent flex-1 text-sm"
+          disabled={!item.availability}
+          onClick={() => {
+            addToCart(item.key, 1);
+            toast.success("Added to cart");
+          }}
         >
-          View Details
-        </Link>
+          Add to cart
+        </button>
       </div>
     </div>
   );

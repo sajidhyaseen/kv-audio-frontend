@@ -1,96 +1,63 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
-import { addToCart, removeFromCart, updateCartQty } from "../utils/cart";
-import { FaMinus, FaPlus } from "react-icons/fa";
+import { FaMinus, FaPlus, FaTrash } from "react-icons/fa";
+import api from "../utils/api";
+import { addToCart, removeFromCart } from "../utils/cart";
+import { money } from "../utils/format";
 
-export default function BookingItem({ itemKey, qty, refresh }) {
+export default function BookingItem({ itemKey, qty }) {
   const [item, setItem] = useState(null);
   const [status, setStatus] = useState("loading");
-  const [quantity, setQuantity] = useState(qty);
 
   useEffect(() => {
-    if (status === "loading") {
-      axios
-        .get(`${import.meta.env.VITE_BACKEND_URL}/api/products/${itemKey}`)
-        .then((res) => {
-          setItem(res.data);
-          setStatus("success");
-        })
-        .catch((err) => {
-          console.error(err);
-          setStatus("error");
-          removeFromCart(itemKey);
-          refresh();
-        });
-    }
-  }, [status]);
-
-  useEffect(() => {
-    updateCartQty(itemKey, quantity);
-    refresh();
-  }, [quantity]);
-
+    let cancelled = false;
+    api
+      .get(`/api/products/${itemKey}`)
+      .then((res) => {
+        if (cancelled) return;
+        setItem(res.data);
+        setStatus("success");
+      })
+      .catch(() => {
+        if (cancelled) return;
+        // product no longer exists: drop it from the cart
+        setStatus("error");
+        removeFromCart(itemKey);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [itemKey]);
 
   if (status === "loading") {
-    return (
-      <div className="bg-secondary p-4 rounded-lg animate-pulse text-gray-500">
-        Loading item...
-      </div>
-    );
+    return <div className="w-full max-w-3xl h-28 rounded-xl bg-slate-200 animate-pulse" />;
   }
-
-  if (status === "error" || !item) {
-    return (
-      <div className="bg-red-100 text-red-700 p-4 rounded-lg">
-        Failed to load item.
-      </div>
-    );
-  }
-
-  const total = item.price * quantity;
+  if (status === "error" || !item) return null;
 
   return (
-    <div className="flex flex-col sm:flex-row items-center gap-4 bg-white border border-secondary rounded-xl p-4 shadow-md w-full max-w-3xl">
-      <img
-        src={item.image[0]}
-        alt={item.name}
-        className="w-24 h-24 object-cover rounded-md border border-primary"
-      />
+    <div className="flex items-center gap-4 bg-white border border-slate-200 rounded-xl p-3 shadow-sm w-full max-w-3xl">
+      <img src={item.image[0]} alt={item.name} className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg" />
 
-      <div className="flex flex-col flex-grow">
-        <h2 className="text-lg font-semibold text-gray-800">{item.name}</h2>
+      <div className="flex-grow min-w-0">
+        <h2 className="text-base sm:text-lg font-semibold text-slate-800 truncate">{item.name}</h2>
+        <p className="text-sm text-slate-500">{money(item.price)} / day</p>
+        <div className="mt-2 inline-flex items-center rounded-lg border border-slate-300">
+          <button className="px-3 py-2 hover:text-accent" onClick={() => addToCart(itemKey, -1)} aria-label="Decrease">
+            <FaMinus />
+          </button>
+          <span className="w-8 text-center font-medium">{qty}</span>
+          <button className="px-3 py-2 hover:text-accent" onClick={() => addToCart(itemKey, 1)} aria-label="Increase">
+            <FaPlus />
+          </button>
+        </div>
       </div>
 
       <div className="text-right">
-        <p className="text-accent font-medium">{item.price.toFixed(2)}</p>
-        <p className="font-medium w-[50px] text-center relative flex justify-center items-center">
-          <button className="absolute right-[-5px] hover:text-accent"
-            onClick={() => {
-              addToCart(itemKey, 1);
-              refresh();
-            }}
-          >
-            <FaPlus />
-          </button>
-          {qty}
-          <button className="absolute left-[-5px] hover:text-accent"
-            onClick={() => {
-              if (qty == 1) {
-                removeFromCart(itemKey);
-                refresh();
-              } else {
-                addToCart(itemKey, - 1);
-                refresh();
-              }
-            }}
-          >
-          <FaMinus />
+        <p className="text-sm text-slate-500">per day</p>
+        <p className="text-lg font-semibold text-accent">{money(item.price * qty)}</p>
+        <button className="mt-1 text-slate-400 hover:text-red-600" onClick={() => removeFromCart(itemKey)} aria-label="Remove">
+          <FaTrash />
         </button>
-      </p>
-      <p className="text-[17px] font-semibold text-accent">{(item.price * qty).toFixed(2)}</p>
+      </div>
     </div>
-
-      
-    </div >
   );
 }
