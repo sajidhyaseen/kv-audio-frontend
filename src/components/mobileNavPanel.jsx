@@ -5,6 +5,7 @@ import { RiGalleryLine } from "react-icons/ri";
 import { BsCalendar2Check } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../utils/auth";
+import api from "../utils/api";
 
 export default function MobileNavPanel({ isOpen, setOpen, user }) {
   const navigate = useNavigate();
@@ -12,6 +13,14 @@ export default function MobileNavPanel({ isOpen, setOpen, user }) {
   function goTo(route) {
     navigate(route);
     setOpen(false);
+  }
+
+  async function handleLogout() {
+    try {
+      await api.post("/api/users/logout");
+    } finally {
+      logout();
+    }
   }
 
   const row = "text-[20px] text-ink px-4 py-3 flex items-center gap-3 cursor-pointer hover:bg-slate-100";
@@ -44,7 +53,7 @@ export default function MobileNavPanel({ isOpen, setOpen, user }) {
 
         <div className="border-t mt-2 pt-2">
           {user ? (
-            <div onClick={logout} className={row}>Logout</div>
+            <div onClick={handleLogout} className={row}>Logout</div>
           ) : (
             <>
               <div onClick={() => goTo("/login")} className={row}>Login</div>
