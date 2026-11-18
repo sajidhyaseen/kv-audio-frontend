@@ -61,6 +61,7 @@ export default function LoginPage() {
           <input
             type="email"
             placeholder="Email"
+            aria-label="Email address"
             className="h-12 w-full rounded-xl border border-white/20 bg-white/10 px-4 text-white outline-none transition placeholder:text-slate-300 focus:border-accent focus:ring-4 focus:ring-accent/20"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -70,6 +71,7 @@ export default function LoginPage() {
           <input
             type="password"
             placeholder="Password"
+            aria-label="Password"
             className="h-12 w-full rounded-xl border border-white/20 bg-white/10 px-4 text-white outline-none transition placeholder:text-slate-300 focus:border-accent focus:ring-4 focus:ring-accent/20"
             value={password}
             onChange={(e) => setPassword(e.target.value)}

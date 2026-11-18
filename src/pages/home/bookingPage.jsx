@@ -124,7 +124,7 @@ export default function BookingPage() {
               )}
             </div>
 
-            <button className="btn btn-accent w-full mt-4" disabled={submitting || !!quoteError || !quote} onClick={handleBookingCreation}>
+            <button className="btn btn-accent w-full mt-4" disabled={submitting || !!quoteError || !quote} onClick={handleBookingCreation} aria-busy={submitting}>
               {submitting ? "Sending..." : "Create booking"}
             </button>
             {!getUser() && <p className="mt-2 text-xs text-slate-500">You will be asked to log in before the booking is sent.</p>}

@@ -12,8 +12,12 @@ export default function ProductCard({ item }) {
           src={item.image?.[0] || "/logo.png"}
           alt={item.name}
           loading="lazy"
+          onError={(event) => {
+            event.currentTarget.onerror = null;
+            event.currentTarget.src = "/logo.png";
+          }}
         />
-        <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-slate-700 capitalize shadow-sm backdrop-blur">
+        <span className="absolute left-3 top-3 rounded-full bg-white/50 px-3 py-1 text-xs font-semibold text-slate-900 capitalize shadow-sm backdrop-blur">
           {item.category}
         </span>
       </Link>

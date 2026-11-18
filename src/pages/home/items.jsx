@@ -18,8 +18,9 @@ export default function Items() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
   const [sort, setSort] = useState("default");
-
-  useEffect(() => {
+  const loadItems = () => {
+    setState("loading");
+    setErrorMessage("");
     api
       .get("/api/products")
       .then((res) => {
@@ -30,6 +31,10 @@ export default function Items() {
         setErrorMessage(apiError(err, "Failed to load products"));
         setState("error");
       });
+  };
+
+  useEffect(() => {
+    loadItems();
   }, []);
 
   const categories = useMemo(() => ["all", ...new Set(items.map((i) => i.category))], [items]);
@@ -55,9 +60,16 @@ export default function Items() {
       <div className="mt-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div className="relative md:w-80">
           <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input className="input !pl-10" placeholder="Search equipment" value={search} onChange={(e) => setSearch(e.target.value)} />
+          <label className="sr-only" htmlFor="equipment-search">Search equipment</label>
+          <input id="equipment-search" className="input !pl-10" placeholder="Search equipment" value={search} onChange={(e) => setSearch(e.target.value)} />
+          {search && (
+            <button type="button" className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-slate-500 hover:text-slate-800" onClick={() => setSearch("")}>
+              Clear
+            </button>
+          )}
         </div>
-        <select className="input md:w-56" value={sort} onChange={(e) => setSort(e.target.value)}>
+        <label className="sr-only" htmlFor="equipment-sort">Sort equipment</label>
+        <select id="equipment-sort" className="input md:w-56" value={sort} onChange={(e) => setSort(e.target.value)}>
           {Object.entries(SORTS).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
         </select>
       </div>
@@ -78,7 +90,12 @@ export default function Items() {
 
       <div className="mt-8">
         {state === "loading" && <Spinner />}
-        {state === "error" && <div className="text-center text-red-600 font-medium py-10">{errorMessage}</div>}
+        {state === "error" && (
+          <div className="mx-auto max-w-md rounded-2xl border border-red-100 bg-red-50 p-6 text-center">
+            <p className="font-medium text-red-700">{errorMessage}</p>
+            <button type="button" className="btn btn-outline mt-4" onClick={loadItems}>Try again</button>
+          </div>
+        )}
         {state === "success" &&
           (visible.length === 0 ? (
             <div className="text-center text-slate-500 py-16">No equipment matches your search.</div>

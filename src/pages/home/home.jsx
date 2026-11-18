@@ -8,6 +8,7 @@ import { stars } from "../../utils/format";
 import ProductCard from "../../components/productCard";
 import Spinner from "../../components/spinner";
 import { siteConfig } from "../../config/site";
+import UserAvatar from "../../components/userAvatar";
 
 const FEATURES = [
   { icon: FaMusic, title: "Quality equipment", text: "Speakers, mixers, microphones and lighting that are ready for the stage." },
@@ -105,7 +106,7 @@ export default function Home() {
       </section>
 
       {/* How it works */}
-      <section className="mt-16 bg-white border-y border-slate-100">
+      <section className="mt-16 bg-[#111827] border-y border-slate-700/60">
         <div className="mx-auto max-w-7xl px-4 py-14">
           <h2 className="text-3xl font-bold tracking-tight text-slate-800 text-center">How it works</h2>
           <div className="mt-8 grid gap-6 md:grid-cols-3">
@@ -130,7 +131,7 @@ export default function Home() {
             {reviews.map((r) => (
               <figure key={r.email} className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
                 <div className="flex items-center gap-3">
-                  <img src={r.profilePicture} alt="" className="w-11 h-11 rounded-full object-cover" referrerPolicy="no-referrer" />
+                  <UserAvatar src={r.profilePicture} name={r.name} size="lg" />
                   <div>
                     <figcaption className="font-semibold text-slate-800">{r.name}</figcaption>
                     <div className="text-amber-500 text-sm" aria-label={`${r.rating} out of 5`}>{stars(r.rating)}</div>
