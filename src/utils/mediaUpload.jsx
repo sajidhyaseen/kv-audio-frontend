@@ -11,7 +11,13 @@ if (!supabaseUrl || !anonKey) {
 const BUCKET = "images";
 const MAX_SIZE = 5 * 1024 * 1024; // 5 MB
 
-const supabase = createClient(supabaseUrl, anonKey);
+const supabase = createClient(supabaseUrl, anonKey, {
+  auth: {
+    persistSession: false,
+    autoRefreshToken: false,
+    detectSessionInUrl: false,
+  },
+});
 
 /** Uploads one image to Supabase Storage and resolves with its public URL. Rejects with an Error. */
 export default async function mediaUpload(file) {
@@ -25,9 +31,26 @@ export default async function mediaUpload(file) {
   const { error } = await supabase.storage.from(BUCKET).upload(fileName, file, {
     cacheControl: "3600",
     upsert: false,
+    contentType: file.type,
   });
   if (error) {
-    console.error("Supabase upload error:", error);
+    const details = {
+      name: error.name,
+      message: error.message,
+      status: error.status,
+      statusCode: error.statusCode,
+    };
+    console.error("Supabase upload error:", details);
+
+    if (error.statusCode === "404" || error.statusCode === 404 || error.message?.includes("Bucket not found")) {
+      throw new Error('Supabase storage bucket "images" does not exist. Create it in Supabase Storage and enable public access.');
+    }
+    if (error.statusCode === "403" || error.statusCode === 403 || error.message?.toLowerCase().includes("not authorized")) {
+      throw new Error('Supabase rejected the upload. Add an upload policy for the "images" bucket.');
+    }
+    if (error.message?.toLowerCase().includes("signature verification failed")) {
+      throw new Error("The Supabase browser key is invalid or outdated. Update VITE_SUPABASE_ANON_KEY with the current publishable or anon key.");
+    }
     throw new Error(error.message || "Error uploading file");
   }
   return supabase.storage.from(BUCKET).getPublicUrl(fileName).data.publicUrl;
