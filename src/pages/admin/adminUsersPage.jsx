@@ -61,7 +61,7 @@ export default function AdminUsersPage() {
               {users.map((user) => (
                 <tr
                   key={user._id}
-                  className="border-t hover:bg-gray-50 transition"
+                  className="border-t hover:bg-gray-700 transition"
                 >
                   <td className="px-4 py-2">
                     <UserAvatar

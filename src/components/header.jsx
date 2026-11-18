@@ -65,13 +65,13 @@ export default function Header() {
                 ) : (
                   <UserAvatar firstName={user.firstName} lastName={user.lastName} email={user.email} size="sm" />
                 )}
-                <button className="text-sm text-slate-300 transition hover:text-white" onClick={async () => {
+                <button className="text-sm text-slate-200 transition hover:text-red-500" onClick={async () => {
                   try { await api.post("/api/users/logout"); } finally { logout(); }
                 }}>Logout</button>
               </>
             ) : (
               <>
-                <Link to="/login" className="text-sm text-slate-200 hover:text-white">Login</Link>
+                <Link to="/login" className="text-sm text-slate-200 hover:text-green-500">Login</Link>
                 <Link to="/register" className="btn btn-accent !py-1 text-sm">Sign up</Link>
               </>
             )}
