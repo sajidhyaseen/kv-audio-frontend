@@ -50,7 +50,7 @@ export default function AdminItemsPage() {
         <div className="border-4 my-4 border-b-green-500 rounded-full animate-spin w-16 h-16" />
       )}
       {itemsLoaded && (
-        <div className="overflow-x-auto w-full max-w-6xl">
+        <div className="overflow-x-auto w-full max-w-9xl">
           <table className="w-full min-w-max border border-gray-300 rounded-lg shadow-md bg-white">
             <thead className="bg-gray-100">
               <tr className="text-left text-gray-700">
@@ -67,22 +67,22 @@ export default function AdminItemsPage() {
             <tbody>
               {items.map((product) => (
                 <tr key={product.key} className="border-b">
-                  <td className="px-4 py-3 text-gray-700">{product.key}</td>
-                  <td className="px-4 py-3 text-gray-700">{product.name}</td>
-                  <td className="px-4 py-3 text-gray-700">Rs. {product.price}</td>
-                  <td className="px-4 py-3 text-gray-700">{product.stock ?? 1}</td>
-                  <td className="px-4 py-3 text-gray-700">{product.category}</td>
-                  <td className="px-4 py-3 text-gray-700">{product.dimensions}</td>
-                  <td className="px-4 py-3 text-gray-700">
+                  <td className="px-3 py-3 text-white">{product.key}</td>
+                  <td className="px-3 py-3 text-white">{product.name}</td>
+                  <td className="px-3 py-3 text-white">Rs. {product.price}</td>
+                  <td className="px-3 py-3 text-white">{product.stock ?? 1}</td>
+                  <td className="px-3 py-3 text-white">{product.category}</td>
+                  <td className="px-3 py-3 text-white">{product.dimensions}</td>
+                  <td className="px-3 py-3 text-white">
                     {product.availability ? (
-                      <span className="text-green-500 bg-green-50 font-semibold px-4 py-2 rounded">Available</span>
+                      <span className="text-green-500 bg-green-50 font-semibold px-2 py-1 rounded">Available</span>
                     ) : (
-                      <span className="text-red-500 bg-red-50 font-semibold px-4 py-2 rounded">Out of Stock</span>
+                      <span className="text-red-500 bg-red-50 font-semibold px-2 py-1 rounded">Out of Stock</span>
                     )}
                   </td>
                   <td className="px-4 py-3 text-center">
                     <button
-                      className="text-white hover:text-black font-semibold px-4 py-2 rounded bg-blue-500"
+                      className="text-white hover:text-black font-semibold px-2 py-1 rounded bg-blue-500"
                       onClick={() => {
                         navigate('/admin/items/edit', { state: product });
                       }}
@@ -90,13 +90,13 @@ export default function AdminItemsPage() {
                       <FaEdit className="inline mr-1" /> Edit
                     </button>
                     <button
-                      className="ml-3 text-white hover:text-black font-semibold px-4 py-2 rounded bg-red-500"
+                      className="ml-3 text-white hover:text-black font-semibold px-2 py-1 rounded bg-red-500"
                       onClick={() => handleDelete(product.key)}
                     >
                       <FaTrashAlt className="inline mr-1" /> Delete
                     </button>
                     <button
-                      className="ml-3 text-white hover:text-black font-semibold px-4 py-2 rounded bg-green-500"
+                      className="ml-3 text-white hover:text-black font-semibold px-2 py-1 rounded bg-green-500"
                       onClick={() => handleView(product.key)}
                     >
                       <FaEye className="inline mr-1" /> View

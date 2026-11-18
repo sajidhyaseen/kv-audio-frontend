@@ -12,7 +12,7 @@ import MyOrders from "./myOrders";
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50">
+    <div className="min-h-screen flex flex-col bg-[#0b1120]">
       <Header />
       <main className="flex-1 w-full">
         <Routes>

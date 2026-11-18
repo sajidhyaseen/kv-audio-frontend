@@ -9,6 +9,7 @@ import RegisterPage from './pages/register/register';
 import VerifyEmail from './pages/verifyEmail/verifyEmail';
 import ForgotPassword from './pages/forgotPassword/forgotPassword';
 import ResetPassword from './pages/resetPassword/resetPassword';
+import ScrollToTop from './components/scrollToTop';
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -20,7 +21,23 @@ function App() {
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <BrowserRouter>
-        <Toaster position="top-right" />
+        <ScrollToTop />
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 3500,
+            style: {
+              borderRadius: "12px",
+              background: "#0f172a",
+              color: "#fff",
+              fontSize: "14px",
+              border: "1px solid rgba(255,255,255,.10)",
+              padding: "12px 14px",
+            },
+            success: { iconTheme: { primary: "#22c55e", secondary: "#fff" } },
+            error: { iconTheme: { primary: "#ef4444", secondary: "#fff" } },
+          }}
+        />
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />

@@ -47,7 +47,7 @@ export default function AdminOrdersPage() {
         <p>Loading...</p>
       ) : (
         <table className="table-auto border-collapse border border-gray-300 w-full max-w-6xl">
-          <thead className="bg-gray-100">
+          <thead className="bg-gray-700">
             <tr>
               <th className="border border-gray-300 px-4 py-2">Order ID</th>
               <th className="border border-gray-300 px-4 py-2">Email</th>

@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import api, { apiError } from "../../utils/api";
 import { fmtDateTime, stars } from "../../utils/format";
 import Spinner from "../../components/spinner";
+import UserAvatar from "../../components/userAvatar";
 
 export default function AdminReviewsPage() {
   const [reviews, setReviews] = useState(null);
@@ -29,7 +30,7 @@ export default function AdminReviewsPage() {
       <div className="mt-4 flex flex-col gap-3">
         {reviews.map((r) => (
           <div key={r.email} className="bg-white rounded-xl border border-slate-200 p-4 flex gap-4">
-            <img src={r.profilePicture} alt="" className="w-12 h-12 rounded-full object-cover" referrerPolicy="no-referrer" />
+            <UserAvatar src={r.profilePicture} name={r.name} size="lg" />
             <div className="flex-1 min-w-0">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="font-semibold text-slate-800">{r.name}</span>

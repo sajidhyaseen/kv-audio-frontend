@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { CiHome, CiSpeaker } from "react-icons/ci";
 import { IoMdClose } from "react-icons/io";
 import { MdOutlineContactMail } from "react-icons/md";
@@ -9,6 +10,20 @@ import api from "../utils/api";
 
 export default function MobileNavPanel({ isOpen, setOpen, user }) {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, setOpen]);
 
   function goTo(route) {
     navigate(route);
@@ -23,7 +38,7 @@ export default function MobileNavPanel({ isOpen, setOpen, user }) {
     }
   }
 
-  const row = "text-[20px] text-ink px-4 py-3 flex items-center gap-3 cursor-pointer hover:bg-slate-100";
+  const row = "text-[15px] font-medium text-slate-200 px-4 py-3 flex items-center gap-3 cursor-pointer rounded-lg mx-2 hover:bg-white/10";
 
   return (
     <div
@@ -31,16 +46,23 @@ export default function MobileNavPanel({ isOpen, setOpen, user }) {
         isOpen ? "opacity-100 visible" : "opacity-0 invisible"
       }`}
       onClick={() => setOpen(false)}
+      aria-hidden={!isOpen}
     >
       <div
-        className={`h-full bg-white w-[300px] transform transition-transform duration-300 text-left ${
+        id="mobile-navigation"
+        className={`h-full bg-[#151c2b] w-[300px] max-w-[85vw] transform transition-transform duration-300 text-left ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Navigation menu"
       >
         <div className="bg-ink w-full h-[70px] flex relative justify-center items-center">
           <img src="/logo.png" className="w-[46px] h-[46px] object-cover border-2 border-accent absolute left-3 rounded-full" alt="logo" />
-          <IoMdClose className="absolute right-3 text-3xl cursor-pointer text-white" onClick={() => setOpen(false)} />
+          <button type="button" className="absolute right-3 h-10 w-10 rounded-lg flex items-center justify-center text-2xl text-white transition hover:bg-white/10" onClick={() => setOpen(false)} aria-label="Close menu">
+            <IoMdClose />
+          </button>
         </div>
 
         <div onClick={() => goTo("/")} className={row}><CiHome /> Home</div>
@@ -51,7 +73,7 @@ export default function MobileNavPanel({ isOpen, setOpen, user }) {
         {user && <div onClick={() => goTo("/my-orders")} className={row}><BsCalendar2Check /> My Bookings</div>}
         {user?.role === "admin" && <div onClick={() => goTo("/admin")} className={row}><CiSpeaker /> Admin</div>}
 
-        <div className="border-t mt-2 pt-2">
+        <div className="border-t border-slate-700 mt-2 pt-2">
           {user ? (
             <div onClick={handleLogout} className={row}>Logout</div>
           ) : (

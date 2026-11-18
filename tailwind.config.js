@@ -10,7 +10,10 @@ export default {
         primary : "#C0C9EE",
         secondary : "#DBDBDB",
         accent : "#E16A54",
-        ink : "#0f172a"
+        ink : "#0f172a",
+        canvas : "#0b1120",
+        surface : "#151c2b",
+        surfaceRaised : "#1b2435"
       }
     },
   },

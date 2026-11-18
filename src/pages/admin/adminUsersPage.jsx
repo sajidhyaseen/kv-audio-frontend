@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../../utils/api";
+import UserAvatar from "../../components/userAvatar";
 
 export default function AdminUsersPage() {
   const [users, setUsers] = useState([]);
@@ -60,13 +61,14 @@ export default function AdminUsersPage() {
               {users.map((user) => (
                 <tr
                   key={user._id}
-                  className="border-t hover:bg-gray-50 transition"
+                  className="border-t hover:bg-gray-700 transition"
                 >
                   <td className="px-4 py-2">
-                    <img
+                    <UserAvatar
                       src={user.profilePicture}
-                      alt="profile"
-                      className="w-10 h-10 rounded-full border object-cover"
+                      firstName={user.firstName}
+                      lastName={user.lastName}
+                      email={user.email}
                     />
                   </td>
                   <td className="px-4 py-2 font-medium">

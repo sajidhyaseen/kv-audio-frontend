@@ -46,7 +46,7 @@ export default function AdminPage() {
   }, []);
 
   return (
-    <div className="w-full h-screen flex bg-[#f7f8fb]">
+    <div className="w-full h-screen flex bg-[#0b1120]">
       <aside className="w-16 md:w-60 h-full bg-ink text-slate-200 flex flex-col shrink-0 shadow-xl shadow-slate-950/10">
         <Link to="/" className="h-[70px] flex items-center justify-center md:justify-start md:px-4 gap-3 border-b border-slate-700">
           <img src="/logo.png" alt="" className="w-9 h-9 rounded-full object-cover border-2 border-accent" />
